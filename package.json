@@ -1,0 +1,22 @@
+{
+  "name": "screens-api",
+  "version": "0.1.0",
+  "description": "API for https://github.com/JonathanRappner/screens",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonathanRappner/screens-api.git"
+  },
+  "author": "Jonathan Rappner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JonathanRappner/screens-api/issues"
+  },
+  "homepage": "https://github.com/JonathanRappner/screens-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
