@@ -14,7 +14,8 @@ const port = 3000
 // Middleware that runs on every request
 app.use((req, res, next) => {
 	const now = moment().format('YYYY-MM-DD HH:mm:ss')
-	console.log(chalk.green(req.method), chalk.yellow(req.url), chalk.blue(`(${now})`))
+	const ipv4 = req.ip.match(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/)[0]
+	console.log(chalk.green(req.method), chalk.yellow(req.url), chalk.red(ipv4), chalk.blue(`(${now})`))
 	next() // run the request
 })
 
