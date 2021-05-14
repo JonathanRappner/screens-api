@@ -1,7 +1,18 @@
-const express = require("express") // API framework
-const app = express()
 const moment = require('moment') // time
 const chalk = require('chalk') // console.log() colors
+const db = require('./db') // Mysql database + connection
+
+// Express
+const express = require('express') // API framework
+const app = express()
+
+//////////////////////////// temp
+db.query('SELECT * FROM screens ORDER BY id DESC LIMIT 1', (error, rows) => {
+	if(error) throw error
+	console.log(rows[0])
+})
+////////////////////////////
+
 
 // Routes
 const cars = require('./routes/cars')
@@ -16,7 +27,7 @@ app.use((req, res, next) => {
 	const now = moment().format('YYYY-MM-DD HH:mm:ss')
 	const ipv4 = req.ip.match(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/)[0]
 	console.log(chalk.green(req.method), chalk.yellow(req.url), chalk.red(ipv4), chalk.blue(`(${now})`))
-	next() // run the request
+	next() // run next middleware
 })
 
 
