@@ -1,26 +1,17 @@
 const moment = require('moment') // time
 const chalk = require('chalk') // console.log() colors
-const db = require('./db') // Mysql database + connection
 
 // Express
 const express = require('express') // API framework
 const app = express()
 
-//////////////////////////// temp
-db.query('SELECT * FROM screens ORDER BY id DESC LIMIT 1', (error, rows) => {
-	if(error) throw error
-	console.log(rows[0])
-})
-////////////////////////////
-
 
 // Routes
-const cars = require('./routes/cars')
-const fruits = require('./routes/fruits')
+const screens = require('./routes/screens')
+const games = require('./routes/games')
 
 // Variables
 const port = 3000
-
 
 // Middleware that runs on every request
 app.use((req, res, next) => {
@@ -32,11 +23,11 @@ app.use((req, res, next) => {
 
 
 // Routes references
-app.use('/car', cars)
-app.use('/fruits?', fruits)
 app.get('/', (req, res) => {
 	res.send('Welcome to the screens API')
 })
+app.use('/screens', screens)
+app.use('/games', games)
 
 
 // Start listening for requests...
