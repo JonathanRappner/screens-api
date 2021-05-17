@@ -7,8 +7,8 @@ const app = express()
 
 
 // Routes
-const screens = require('./routes/screens')
-const games = require('./routes/games')
+const screens = require('./routes/screens.route')
+const games = require('./routes/games.route')
 
 // Variables
 const port = 3000
