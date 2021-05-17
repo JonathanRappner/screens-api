@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../db')
+const screens_service = require('../services/games.service')
 
 // Get all games
 router.get('/', (req, res) => {
