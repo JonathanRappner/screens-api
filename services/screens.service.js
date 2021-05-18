@@ -1,6 +1,20 @@
 const moment = require('moment')
 const Screens = {}
 
+/** Add variables and reorganize screenshot from db */
+Screens.process = (row) => {
+	data = { // return object
+		id: row.id,
+		ico_nrb: row.ico_nrb,
+		description: row.description
+	}
+
+	// get thumbnail file_name
+	data.path = Screens.get_paths(row.id, row.file_name)
+
+	return data
+}
+
 /** Get all paths, filenames and dirs */
 Screens.get_paths = (date_unix, file_name) => {
 	const year = moment.unix(date_unix).format('YYYY')
