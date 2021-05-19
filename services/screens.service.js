@@ -44,6 +44,7 @@ Screens.get_thumb_file_name = (file_name) => {
 }
 
 // TODO get moar paths/dirs
+// TODO call it paths URLs or something
 // TODO get time variables
 // TODO get game variables
 
