@@ -15,7 +15,7 @@ router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', (req, res) => {
 
 	const where_statement = start == 'latest'
 		? ''
-		: 'WHERE s.id = '+ start
+		: 'WHERE s.id <= '+ start
 
 	db.query(
 		`SELECT
@@ -54,7 +54,7 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', (req, res
 
 	const where_statement = start == 'latest'
 		? ''
-		: `s.id = ${start} AND`
+		: `s.id <= ${start} AND`
 
 	db.query(
 		`SELECT
