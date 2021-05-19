@@ -4,10 +4,18 @@ const db = require('../db')
 const screens_service = require('../services/screens.service')
 
 
-/** Get screenshots without game filter */
-router.get('/all/:start(\\d{10})/:length(\\d+)', (req, res) => {
+/** 
+ * Get screenshots without game filter
+ * Example: screens/all/1621107351/8 (eight screens incl. 1621107351 and older)
+ * Example: screens/all/latest/4 (4 latest/newest screens)
+ */
+router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', (req, res) => {
 	const start = req.params.start // this screen id and earlier
 	const length = parseInt(req.params.length)
+
+	const where_statement = start == 'latest'
+		? ''
+		: 'WHERE s.id = '+ start
 
 	db.query(
 		`SELECT
@@ -16,11 +24,10 @@ router.get('/all/:start(\\d{10})/:length(\\d+)', (req, res) => {
 		FROM screens s
 		INNER JOIN screens_games g
 			ON s.game_code = g.code
-		WHERE
-			s.id <= ?
+		${where_statement}
 		ORDER BY s.id DESC
 		LIMIT ?`,
-		[start, length],
+		length,
 		(error, rows) => {
 			if(error) throw error
 
@@ -35,11 +42,19 @@ router.get('/all/:start(\\d{10})/:length(\\d+)', (req, res) => {
 	)
 })
 
-/** Get screenshots with game filter */
-router.get('/:game_filter(\\w+)/:start(\\d{10})/:length(\\d+)', (req, res) => {
+/** 
+ * Get screenshots with game filter
+ * Example: screens/me/1621107351/8 (eight screens incl. 1621107351 and older)
+ * Example: screens/me2/latest/4 (4 latest/newest Mass Effect 2 screens)
+ */
+router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', (req, res) => {
 	const game_filter = req.params.game_filter // game code
 	const start = req.params.start // this screen id and earlier
 	const length = parseInt(req.params.length)
+
+	const where_statement = start == 'latest'
+		? ''
+		: `s.id = ${start} AND`
 
 	db.query(
 		`SELECT
@@ -49,11 +64,11 @@ router.get('/:game_filter(\\w+)/:start(\\d{10})/:length(\\d+)', (req, res) => {
 		INNER JOIN screens_games g
 			ON s.game_code = g.code
 		WHERE
-			s.id <= ?
-			AND s.game_code = ?
+			${where_statement}
+			s.game_code = ?
 		ORDER BY s.id DESC
 		LIMIT ?`,
-		[start, game_filter, length],
+		[game_filter, length],
 		(error, rows) => {
 			if(error) throw error
 
