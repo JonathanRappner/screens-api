@@ -4,6 +4,7 @@
 	"description": "API for https://github.com/JonathanRappner/screens",
 	"main": "index.js",
 	"scripts": {
+		"start": "nodemon server.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
