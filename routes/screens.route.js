@@ -9,7 +9,7 @@ const screens_service = require('../services/screens.service')
  * Example: screens/all/1621107351/8 (eight screens incl. 1621107351 and older)
  * Example: screens/all/latest/4 (4 latest/newest screens)
  */
-router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', (req, res) => {
+router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', async (req, res) => {
 	const start = req.params.start // this screen id and earlier
 	const length = parseInt(req.params.length)
 
@@ -17,7 +17,7 @@ router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', (req, res) => {
 		? ''
 		: 'WHERE s.id <= '+ start
 
-	db.query(
+	const [rows] = await db.query(
 		`SELECT
 			s.id, s.date_time, s.file_name, s.game_code, s.description,
 			g.name game_name, g.ico_nbr
@@ -27,19 +27,18 @@ router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', (req, res) => {
 		${where_statement}
 		ORDER BY s.id DESC
 		LIMIT ?`,
-		length,
-		(error, rows) => {
-			if(error) throw error
-
-			if (rows.length)
-			{
-				data = rows.map(row => screens_service.process(row)) // process each row
-				res.json(data) // success
-			}
-			else
-				res.status(400).json({ message: `Screenshot with id: ${screen_id} doesn't exist.` }) // incorrect id
-		}
+		length
 	)
+
+	// if(error) res.status(500).json({message: error})
+
+	if (rows.length)
+	{
+		data = rows.map(row => screens_service.process(row)) // process each row
+		res.json(data) // success
+	}
+	else
+		res.status(500)
 })
 
 /** 
@@ -47,7 +46,7 @@ router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', (req, res) => {
  * Example: screens/me/1621107351/8 (eight screens incl. 1621107351 and older)
  * Example: screens/me2/latest/4 (4 latest/newest Mass Effect 2 screens)
  */
-router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', (req, res) => {
+router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', async (req, res) => {
 	const game_filter = req.params.game_filter // game code
 	const start = req.params.start // this screen id and earlier
 	const length = parseInt(req.params.length)
@@ -56,7 +55,7 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', (req, res
 		? ''
 		: `s.id <= ${start} AND`
 
-	db.query(
+	const [rows] = await db.query(
 		`SELECT
 			s.id, s.date_time, s.file_name, s.game_code, s.description,
 			g.name game_name, g.ico_nbr
@@ -68,26 +67,27 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', (req, res
 			s.game_code = ?
 		ORDER BY s.id DESC
 		LIMIT ?`,
-		[game_filter, length],
-		(error, rows) => {
-			if(error) throw error
-
-			if (rows.length)
-			{
-				data = rows.map(row => screens_service.process(row)) // process each row
-				res.json(data) // success
-			}
-			else
-				res.status(400).json({ message: `Screenshot with id: ${screen_id} doesn't exist.` }) // incorrect id
-		}
+		[game_filter, length]
 	)
+
+	// if(error) res.status(500).json({message: error})
+		
+	if (rows.length)
+	{
+		data = rows.map(row => screens_service.process(row)) // process each row
+		res.json(data) // success
+	}
+	else
+		res.status(500)
 })
 
-/** Get single screenshot's data */
-router.get('/:id(\\d{10})', (req, res) => {
+/** Get single screenshot's data
+ * Example screens/1623870259
+ */
+router.get('/:id(\\d{10})', async (req, res) => {
 	const screen_id = req.params.id
 
-	db.query(
+	const [rows] = await db.query(
 		`SELECT
 			s.id, s.date_time, s.file_name, s.game_code, s.description,
 			g.name game_name, g.ico_nbr
@@ -95,18 +95,18 @@ router.get('/:id(\\d{10})', (req, res) => {
 		INNER JOIN screens_games g
 			ON s.game_code = g.code
 		WHERE s.id = ?`,
-		screen_id,
-		(error, rows) => {
-			if (rows.length)
-			{
-				test = screens_service.get_paths(1621012474, 'me_2021-05-14_19.14.34.webp')
-				data = screens_service.process(rows[0])
-				res.json(data) // success
-			}
-			else
-				res.status(400).json({ message: `Screenshot with id: ${screen_id} doesn't exist.` }) // incorrect id
-		}
+		screen_id
 	)
+
+	// if(error) res.status(500).jsoon({message: error})
+	
+	if (rows.length)
+	{
+		data = screens_service.process(rows[0])
+		res.json(data) // success
+	}
+	else
+		res.status(400).json({ message: `Screenshot with id: ${screen_id} doesn't exist.` }) // incorrect id
 
 })
 

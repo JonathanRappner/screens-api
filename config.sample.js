@@ -4,8 +4,7 @@ module.exports =
 		host: 'localhost',
 		user: '',
 		password: '',
-		database: 'screens',
-		timezone: 'Europe/Stockholm'
+		database: 'screens'
 	},
 	static_url: 'static.localhost'
 }
