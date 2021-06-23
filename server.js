@@ -34,6 +34,7 @@ app.use((req, res, next) => {
 			chalk.blue(`(${now})`) // tid
 		)
 	}
+	
 	next() // run next middleware
 })
 
