@@ -17,4 +17,4 @@ jspm_packages/
 _stuff
 
 # Config files
-*_config.json
+config.js

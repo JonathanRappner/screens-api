@@ -1,5 +1,5 @@
-const db_config = require('./db_config.json')
+const config = require('./config')
 const mysql = require('mysql')
-const db = mysql.createConnection(db_config)
+const db = mysql.createConnection(config.db)
 
 module.exports = db

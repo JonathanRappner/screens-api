@@ -1,6 +1,7 @@
 const moment = require('moment')
+const config = require('../config')
+
 const Screens = {}
-const static_url = 'https://static.aeoah.se/' //////save in a config file instead
 
 /** Add variables and reorganize screenshot from db */
 Screens.process = (row) => {
@@ -25,11 +26,11 @@ Screens.get_paths = (date_unix, file_name) => {
 	return {
 		screen: {
 			file_name: file_name,
-			path: `${static_url}screens/${year}/${month}/${file_name}`
+			path: `${config.static_url}screens/${year}/${month}/${file_name}`
 		},
 		thumb: {
 			file_name: file_name_thumb,
-			path: `${static_url}screens/${year}/${month}/${file_name_thumb}`
+			path: `${config.static_url}screens/${year}/${month}/${file_name_thumb}`
 		}
 	}
 }
