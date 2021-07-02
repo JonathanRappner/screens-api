@@ -38,7 +38,6 @@ app.use((req, res, next) => {
 	next() // run next middleware
 })
 
-
 // Routes references
 app.get('/', (req, res) => {
 	res.send('Welcome to the screens API')
