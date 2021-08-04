@@ -19,7 +19,7 @@ router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', async (req, res) => {
 
 	const [rows] = await db.query(
 		`SELECT
-			s.id, s.date_time, s.file_name, s.game_code, s.description,
+			s.id, s.date_time, s.file_name, s.game_code, s.width, s.height, s.description,
 			g.name game_name, g.ico_nbr
 		FROM screens s
 		INNER JOIN screens_games g
@@ -57,7 +57,7 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', async (re
 
 	const [rows] = await db.query(
 		`SELECT
-			s.id, s.date_time, s.file_name, s.game_code, s.description,
+			s.id, s.date_time, s.file_name, s.game_code, s.width, s.height, s.description,
 			g.name game_name, g.ico_nbr
 		FROM screens s
 		INNER JOIN screens_games g
@@ -89,7 +89,7 @@ router.get('/:id(\\d{10})', async (req, res) => {
 
 	const [rows] = await db.query(
 		`SELECT
-			s.id, s.date_time, s.file_name, s.game_code, s.description,
+			s.id, s.date_time, s.file_name, s.game_code, s.width, s.height, s.description,
 			g.name game_name, g.ico_nbr
 		FROM screens s
 		INNER JOIN screens_games g
@@ -98,7 +98,7 @@ router.get('/:id(\\d{10})', async (req, res) => {
 		screen_id
 	)
 
-	// if(error) res.status(500).jsoon({message: error})
+	// if(error) res.status(500).json({message: error})
 	
 	if (rows.length)
 	{

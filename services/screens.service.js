@@ -19,6 +19,9 @@ Screens.process = (row) => {
 	// get dates and times
 	data.date_time = Screens.getDateTime(row.id, row.date_time)
 
+	// resolution
+	data.resulution = {width: row.width, height: row.height}
+
 	// game data
 	data.game = Screens.getGame(row.game_name, row.game_code, row.ico_nbr)
 
