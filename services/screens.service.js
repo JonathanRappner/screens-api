@@ -75,7 +75,7 @@ Screens.getDateTime = (timestamp) => {
 	data.format_date = moment.unix(timestamp).format('YYYY-MM-DD')
 	data.format_time = moment.unix(timestamp).format('HH:mm:ss')
 	data.format_time_short = moment.unix(timestamp).format('HH:mm')
-	data.format_long = `${data.format_date} ${data.format_time}` 
+	data.format_long = `${data.format_date} ${moment.unix(timestamp).format('HH:mm')}` 
 
 	return data
 }
