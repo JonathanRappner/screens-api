@@ -1,4 +1,5 @@
-const moment = require('moment')
+const format = require('date-fns/format')
+const fromUnixTime = require('date-fns/fromUnixTime')
 const config = require('../config')
 
 const Screens = {}
@@ -29,9 +30,10 @@ Screens.process = (row) => {
 }
 
 /** Get url and filename for screen and thumbnail */
-Screens.getScreenAndThumb = (date_unix, file_name) => {
-	const year = moment.unix(date_unix).format('YYYY')
-	const month = moment.unix(date_unix).format('MM')
+Screens.getScreenAndThumb = (timestamp, file_name) => {
+	const date = fromUnixTime(timestamp)
+	const year = format(date, 'yyyy')
+	const month = format(date, 'MM')
 	const file_name_thumb = Screens.getThumbFileName(file_name)
 
 	return {
@@ -61,21 +63,22 @@ Screens.getThumbFileName = (file_name) => {
  */
 Screens.getDateTime = (timestamp) => {
 	const data = {}
-	
-	data.year = moment.unix(timestamp).format('YYYY')
-	data.month = moment.unix(timestamp).format('MM')
-	data.day = moment.unix(timestamp).format('DD')
-	data.hour = moment.unix(timestamp).format('HH')
-	data.minute = moment.unix(timestamp).format('mm')
-	data.second = moment.unix(timestamp).format('ss')
 
-	data.weekday = moment.unix(timestamp).format('dddd')
-	data.weekday_short = moment.unix(timestamp).format('ddd')
+	const date = fromUnixTime(timestamp)
+	data.year = format(date, 'yyyy')
+	data.month = format(date, 'MM')
+	data.day = format(date, 'dd')
+	data.hour = format(date, 'HH')
+	data.minute = format(date, 'mm')
+	data.second = format(date, 'ss')
 
-	data.format_date = moment.unix(timestamp).format('YYYY-MM-DD')
-	data.format_time = moment.unix(timestamp).format('HH:mm:ss')
-	data.format_time_short = moment.unix(timestamp).format('HH:mm')
-	data.format_long = `${data.format_date} ${moment.unix(timestamp).format('HH:mm')}` 
+	data.weekday = format(date, 'EEEE') // Wednesday
+	data.weekday_short = format(date, 'EEE') // Wed
+
+	data.format_date = `${data.year}-${data.month}-${data.day}` // 2021-09-24
+	data.format_time = format(date, 'HH:mm:ss')
+	data.format_time_short = format(date, 'HH:mm')
+	data.format_long = `${data.format_date} ${data.format_time_short}`
 
 	return data
 }

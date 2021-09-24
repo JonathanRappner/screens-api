@@ -1,4 +1,4 @@
-const moment = require('moment') // time
+const format = require('date-fns/format')
 const chalk = require('chalk') // console.log() colors
 
 // Express
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 	// logging
 	if(methods.includes(req.method.toLowerCase()))
 	{
-		const now = moment().format('YYYY-MM-DD HH:mm:ss')
+		const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
 		const ipv4_matches = req.ip.match(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/)
 		const ipv4 = ipv4_matches !== null ? ipv4_matches[0] : 'localhost' // hämtar IPv4-delen ur req.ip, om ingen IPv4 finns, skriv ut 'localhost'
 		console.log(

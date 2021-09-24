@@ -18,9 +18,9 @@
 	},
 	"homepage": "https://github.com/JonathanRappner/screens-api#readme",
 	"dependencies": {
-		"chalk": "^4.1.1",
+		"chalk": "^4.1.2",
+		"date-fns": "^2.24.0",
 		"express": "^4.17.1",
-		"moment": "^2.29.1",
-		"mysql2": "^2.2.5"
+		"mysql2": "^2.3.0"
 	}
 }
