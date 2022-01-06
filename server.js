@@ -21,14 +21,14 @@ app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 
 	// logging
-	if (methods.includes(req.method.toLowerCase())) {
-		console.log(
-			format(new Date(), '(yyyy-MM-dd HH:mm:ss)'), // tid
-			req.method, // http-metod (GET, POST, osv.)
-			req.url, // url
-			req.body.length ? JSON.stringify(req.body) : ''
-		)
-	}
+	// if (methods.includes(req.method.toLowerCase())) {
+	// 	console.log(
+	// 		format(new Date(), '(yyyy-MM-dd HH:mm:ss)'), // tid
+	// 		req.method, // http-metod (GET, POST, osv.)
+	// 		req.url, // url
+	// 		req.body.length ? JSON.stringify(req.body) : ''
+	// 	)
+	// }
 	next() // kör andra middlewares
 })
 
