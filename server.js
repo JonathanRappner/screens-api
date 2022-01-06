@@ -1,5 +1,4 @@
 const format = require('date-fns/format')
-const chalk = require('chalk') // console.log() colors
 
 // Express
 const express = require('express') // API framework
@@ -16,26 +15,21 @@ const games = require('./routes/games.route')
 const port = 4000
 const methods = ['get', 'post', 'put', 'delete'] // skriv inte ut head och options-metoderna
 
-// Middleware that runs on every request
+// Middleware som körs på alla requests
 app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.header("Access-Control-Allow-Origin", "*")
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 
 	// logging
-	if(methods.includes(req.method.toLowerCase()))
-	{
-		const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
-		const ipv4_matches = req.ip.match(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/)
-		const ipv4 = ipv4_matches !== null ? ipv4_matches[0] : 'localhost' // hämtar IPv4-delen ur req.ip, om ingen IPv4 finns, skriv ut 'localhost'
+	if (methods.includes(req.method.toLowerCase())) {
 		console.log(
-			chalk.green(req.method), // http-metod (GET, POST, osv.)
-			chalk.yellow(req.url), // url
-			chalk.red(ipv4), // IP
-			chalk.blue(`(${now})`) // tid
+			format(new Date(), '(yyyy-MM-dd HH:mm:ss)'), // tid
+			req.method, // http-metod (GET, POST, osv.)
+			req.url, // url
+			req.body.length ? JSON.stringify(req.body) : ''
 		)
 	}
-	
-	next() // run next middleware
+	next() // kör andra middlewares
 })
 
 // Routes references
