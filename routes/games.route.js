@@ -5,51 +5,32 @@ const screens_service = require('../services/games.service')
 
 // Get all games
 router.get('/', (req, res) => {
-	
-	db.query(
-		`SELECT *
-		FROM screens_games`,
-		(error, rows) => {
-			// error
-			if(error) throw error
 
-			res.json(rows)
-		}
-	)
+	db.query(`SELECT * FROM screens_games`)
+		.then(rows => {
+			res.json(rows[0])
+		})
+		.catch(console.error)
 })
 
-
-// Get single game
-
-
-// Get total number of screens
+// Get total number of games
 router.get('/length', (req, res) => {
 	db.query(
 		`SELECT COUNT(*) AS count
-		FROM screens`,
-		(error, rows) => {
-			res.json(rows[0].count)
-		}
-	)
+		FROM screens_games`
+	).then(rows => {
+		res.json(rows[0][0].count)
+	}).catch(console.error)
+		
 })
 
-// Get number of screens for one game
-router.get('/length/:code(\\w+)', (req, res) => {
-	const code = req.params.code
-
-	db.query(
-		`SELECT COUNT(*) AS count
-		FROM screens
-		WHERE game_code = ?`,
-		code,
-		(error, rows) => {
-			const count = rows[0].count
-			if(count)
-				res.json(count)
-			else
-				res.status(400).json({message: `Game code: ${code} doesn't exist.`}) // incorrect game code
-		}
-	)
+// Get single game
+router.get('/:gameCode(\\w+)', (req, res) => {
+	db.query(`SELECT * FROM screens_games WHERE code = ?`, req.params.gameCode)
+		.then(rows => {
+			res.json(rows[0][0])
+		})
+		.catch(console.error)
 })
 
 module.exports = router

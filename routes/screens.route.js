@@ -15,7 +15,7 @@ router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', async (req, res) => {
 
 	const where_statement = start == 'latest'
 		? ''
-		: 'WHERE s.id <= '+ start
+		: 'WHERE s.id <= ' + start
 
 	const [rows] = await db.query(
 		`SELECT
@@ -32,8 +32,7 @@ router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', async (req, res) => {
 
 	// if(error) res.status(500).json({message: error})
 
-	if (rows.length)
-	{
+	if (rows.length) {
 		data = rows.map(row => screens_service.process(row)) // process each row
 		res.json(data) // success
 	}
@@ -71,9 +70,8 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', async (re
 	)
 
 	// if(error) res.status(500).json({message: error})
-		
-	if (rows.length)
-	{
+
+	if (rows.length) {
 		data = rows.map(row => screens_service.process(row)) // process each row
 		res.json(data) // success
 	}
@@ -99,15 +97,33 @@ router.get('/:id(\\d{10})', async (req, res) => {
 	)
 
 	// if(error) res.status(500).json({message: error})
-	
-	if (rows.length)
-	{
+
+	if (rows.length) {
 		data = screens_service.process(rows[0])
 		res.json(data) // success
 	}
 	else
 		res.status(400).json({ message: `Screenshot with id: ${screen_id} doesn't exist.` }) // incorrect id
 
+})
+
+// Get number of screens for one game
+router.get('/length/:code(\\w+)', (req, res) => {
+	const code = req.params.code
+
+	db.query(
+		`SELECT COUNT(*) AS count
+		FROM screens
+		WHERE game_code = ?`,
+		code,
+		(error, rows) => {
+			const count = rows[0].count
+			if (count)
+				res.json(count)
+			else
+				res.status(400).json({ message: `Game code: ${code} doesn't exist.` }) // incorrect game code
+		}
+	)
 })
 
 module.exports = router
