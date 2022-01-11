@@ -20,7 +20,7 @@ router.get('/all/:start(\\d{10}|latest)/:length(\\d+)', async (req, res) => {
 	const [rows] = await db.query(
 		`SELECT
 			s.id, s.date_time, s.file_name, s.game_code, s.width, s.height, s.description,
-			g.name game_name, g.ico_nbr
+			g.name game_name, g.icon16
 		FROM screens s
 		INNER JOIN screens_games g
 			ON s.game_code = g.code
@@ -57,7 +57,7 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', async (re
 	const [rows] = await db.query(
 		`SELECT
 			s.id, s.date_time, s.file_name, s.game_code, s.width, s.height, s.description,
-			g.name game_name, g.ico_nbr
+			g.name game_name, g.icon16
 		FROM screens s
 		INNER JOIN screens_games g
 			ON s.game_code = g.code

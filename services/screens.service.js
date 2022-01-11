@@ -24,7 +24,7 @@ Screens.process = (row) => {
 	data.resolution = {width: row.width, height: row.height}
 
 	// game data
-	data.game = Screens.getGame(row.game_name, row.game_code, row.ico_nbr)
+	data.game = Screens.getGame(row.game_name, row.game_code, row.icon16)
 
 	return data
 }
@@ -83,12 +83,12 @@ Screens.getDateTime = (timestamp) => {
 	return data
 }
 
-Screens.getGame = (game_name, game_code, ico_nbr) => {
+Screens.getGame = (game_name, game_code, icon16) => {
 
 	return {
 		code: game_code,
 		name: game_name,
-		icon16_nbr: ico_nbr,
+		icon16: icon16,
 		icon48_url: `${config.static_url}screens/icons/48/${game_code}.webp`
 	}
 }
