@@ -1,6 +1,7 @@
 const format = require('date-fns/format')
 const fromUnixTime = require('date-fns/fromUnixTime')
 const config = require('../config')
+const db = require('../db')
 
 const Screens = {}
 
@@ -21,10 +22,13 @@ Screens.process = (row) => {
 	data.date_time = Screens.getDateTime(row.id, row.date_time)
 
 	// resolution
-	data.resolution = {width: row.width, height: row.height}
+	data.resolution = { width: row.width, height: row.height }
 
 	// game data
 	data.game = Screens.getGame(row.game_name, row.game_code, row.icon16)
+
+	// neighbours
+	data.neighbours = {previous: row.previous, next: row.next}
 
 	return data
 }
@@ -83,6 +87,13 @@ Screens.getDateTime = (timestamp) => {
 	return data
 }
 
+/**
+ * 
+ * @param {string} game_name E.g: "Team Fortress 2"
+ * @param {strong} game_code E.g: "tf2"
+ * @param {string} icon16 Base64 code for 16px game icon.
+ * @returns 
+ */
 Screens.getGame = (game_name, game_code, icon16) => {
 
 	return {

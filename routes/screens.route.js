@@ -5,7 +5,7 @@ const screens_service = require('../services/screens.service')
 
 
 /** 
- * Get screenshots with game filter
+ * Get multiple screenshots
  * Example: screens/me/1621107351/8 (eight screens incl. 1621107351 and older)
  * Example: screens/me2/latest/4 (4 latest/newest Mass Effect 2 screens)
  */
@@ -27,7 +27,9 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', async (re
 	const [rows] = await db.query(
 		`SELECT
 			s.id, s.date_time, s.file_name, s.game_code, s.width, s.height, s.description,
-			g.name game_name, g.icon16
+			g.name game_name, g.icon16,
+			(SELECT id FROM screens WHERE id < s.id ORDER BY id DESC LIMIT 1) AS previous,
+			(SELECT id FROM screens WHERE id > s.id LIMIT 1) AS next
 		FROM screens s
 		INNER JOIN screens_games g
 			ON s.game_code = g.code
@@ -39,8 +41,6 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', async (re
 		length
 	)
 
-	// if(error) res.status(500).json({message: error})
-
 	if (rows.length) {
 		data = rows.map(row => screens_service.process(row)) // process each row
 		res.json(data) // success
@@ -50,7 +50,7 @@ router.get('/:game_filter(\\w+)/:start(\\d{10}|latest)/:length(\\d+)', async (re
 })
 
 /** 
- * Get single screenshot's data
+ * Get single screenshot
  * Example screens/1623870259
  */
 router.get('/:id(\\d{10})', async (req, res) => {
@@ -59,7 +59,9 @@ router.get('/:id(\\d{10})', async (req, res) => {
 	const [rows] = await db.query(
 		`SELECT
 			s.id, s.date_time, s.file_name, s.game_code, s.width, s.height, s.description,
-			g.name game_name, g.ico_nbr
+			g.name game_name, g.ico_nbr,
+			(SELECT id FROM screens WHERE id < s.id ORDER BY id DESC LIMIT 1) AS previous,
+			(SELECT id FROM screens WHERE id > s.id LIMIT 1) AS next
 		FROM screens s
 		INNER JOIN screens_games g
 			ON s.game_code = g.code
@@ -78,7 +80,9 @@ router.get('/:id(\\d{10})', async (req, res) => {
 
 })
 
-// Get number of screens for one game
+/**	
+ * Get number of screens for one game
+ */
 router.get('/length/:code(\\w+)', (req, res) => {
 	const code = req.params.code
 
